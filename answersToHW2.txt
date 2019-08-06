@@ -1,0 +1,5 @@
+5. Modify existing tests to run on a real device. What should be changed?
+Capabilities “platformName” should be changed to name of real device (in my case it’s FPFDU16B01006411)
+
+6.	Connect a real device to Appium (describe required actions) and run tests.
+Are there any difference with run on emulator?
