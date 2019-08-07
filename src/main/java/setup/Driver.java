@@ -11,47 +11,93 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static enums.PropertiesKey.*;
 import static io.appium.java_client.remote.MobileCapabilityType.*;
 
-public class Driver extends TestProperties {
+public class Driver {
 
-    protected AppiumDriver driver;
-    protected WebDriverWait wait;
+    private static AppiumDriver driverSingle;
+    private static WebDriverWait waitSingle;
 
-    protected DesiredCapabilities capabilities;
+    public static String SUT;
+    public static String BROWSER_TITLE;
+    private static String AUT;
+    private static String TEST_PLATFORM;
+    private static String DRIVER;
+    private static String DEVICE;
 
-    protected String AUT;
-    protected String SUT;
-    protected String TEST_PLATFORM;
-    protected String DRIVER;
-    protected String DEVICE;
-
-    // Constructor initializes properties on driver creation
-    protected Driver() throws IOException {
-        AUT = getProp("aut");
-        String t_sut = getProp("sut");
-        SUT = t_sut == null ? null : "http://" + t_sut;
-        TEST_PLATFORM = getProp("platform");
-        DRIVER = getProp("driver");
-        DEVICE = getProp("device");
+    /**
+     * Sets test properties
+     *
+     * @param properties
+     * @throws IOException
+     */
+    public static void setProperties(TestProperties properties) throws IOException {
+        AUT = properties.getProp(AUT_KEY);
+        SUT = properties.getProp(SUT_KEY);
+        TEST_PLATFORM = properties.getProp(PLATFORM_KEY);
+        DRIVER = properties.getProp(DRIVER_KEY);
+        DEVICE = properties.getProp(DEVICE_KEY);
+        BROWSER_TITLE = properties.getProp(BROWSER_TITLE_KEY);
     }
 
-    protected void prepareDriver() throws Exception {
-        capabilities = new DesiredCapabilities();
-        String browserName;
-        switch (PlatformName.fromString(TEST_PLATFORM)) {
-            case ANDROID:
-                capabilities.setCapability(DEVICE_NAME, DEVICE);
-                browserName = BrowserName.CHROME.getName();
-                break;
-            case IOS:
-                browserName = BrowserName.SAFARI.getName();
-                break;
-            default:
-                throw new Exception("Unknown mobile platform");
-        }
-        capabilities.setCapability(PLATFORM_NAME, TEST_PLATFORM);
+    /**
+     * Initializes driver for Appium server with necessary capabilities
+     *
+     * @throws Exception
+     */
+    public static void prepareDriver() throws Exception {
+        DesiredCapabilities capabilities = getCapabilities();
+        if (driverSingle == null) driverSingle = new AppiumDriver(new URL(DRIVER), capabilities);
+        if (waitSingle == null) waitSingle = new WebDriverWait(driverSingle, 10);
+    }
 
+    /**
+     * Gets driver singleton instance
+     *
+     * @return driver
+     * @throws Exception
+     */
+    public static AppiumDriver getDriver() throws Exception {
+        if (driverSingle == null) prepareDriver();
+        return driverSingle;
+    }
+
+    /**
+     * Gets driver's wait singleton
+     * @return waitSingle
+     */
+    public static WebDriverWait driverWait() {
+        return waitSingle;
+    }
+
+    /**
+     * Gets browser name depends on current platform
+     *
+     * @param platform - platform name
+     * @throws Exception
+     */
+    private static String getBrowserName(String platform) throws Exception {
+        switch (PlatformName.fromString(platform)) {
+            case ANDROID:
+                return BrowserName.CHROME.getName();
+            case IOS:
+                return BrowserName.SAFARI.getName();
+            default:
+                return "Unknown mobile platform";
+        }
+    }
+
+    /**
+     * Gets capabilities for driver
+     *
+     * @return capabilities
+     * @throws Exception
+     */
+    private static DesiredCapabilities getCapabilities() throws Exception {
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability(PLATFORM_NAME, TEST_PLATFORM);
+        capabilities.setCapability(DEVICE_NAME, DEVICE);
         // Setup type of application: mobile, web (or hybrid)
         if (AUT != null && SUT == null) {
             //Native
@@ -59,14 +105,11 @@ public class Driver extends TestProperties {
             capabilities.setCapability(APP, app.getAbsolutePath());
         } else if (SUT != null && AUT == null) {
             // Web
-            capabilities.setCapability(BROWSER_NAME, browserName);
+            capabilities.setCapability(BROWSER_NAME, getBrowserName(TEST_PLATFORM));
         } else {
             throw new Exception("Unclear type of mobile app");
         }
-
-        // Init driver for local Appium server with capabilities have been set
-        driver = new AppiumDriver(new URL(DRIVER), capabilities);
-        wait = new WebDriverWait(driver, 10);
+        return capabilities;
     }
 }
 

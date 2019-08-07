@@ -1,21 +1,40 @@
 package setup;
 
+import enums.PropertiesKey;
+import enums.PropertiesPath;
 import java.io.FileInputStream;
 import java.util.Properties;
 import java.io.IOException;
 
+/**
+ * The class for properties handling
+ */
 public class TestProperties {
-    Properties currentProps = new Properties();
+    Properties currentProps;
+    PropertiesPath propertyPath;
 
-    Properties getCurrentProps() throws IOException {
-        FileInputStream in = new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/nativeTestData.properties");
+    public TestProperties(PropertiesPath path) {
+        this.currentProps = new Properties();
+        this.propertyPath = path;
+    }
+
+    /**
+     * Gets property by key
+     * @throws IOException
+     */
+    String getProp(PropertiesKey propKey) throws IOException {
+        if (!currentProps.containsKey(propKey)) currentProps = getCurrentProps();
+        return currentProps.getProperty(propKey.getName(), null);
+    }
+
+    /**
+     * Gets current properties
+     * @throws IOException
+     */
+    private Properties getCurrentProps() throws IOException {
+        FileInputStream in = new FileInputStream(this.propertyPath.getName());
         currentProps.load(in);
         in.close();
         return currentProps;
-    }
-        protected String getProp(String propKey) throws IOException {
-        if(!currentProps.containsKey(propKey)) currentProps = getCurrentProps();
-        // "default" form used to handle the absence of parameter
-            return currentProps.getProperty(propKey, null);
     }
 }

@@ -1,5 +1,8 @@
 package enums;
 
+/**
+ * The enum for possible platforms
+ */
 public enum PlatformName {
 
     ANDROID("Android"),
