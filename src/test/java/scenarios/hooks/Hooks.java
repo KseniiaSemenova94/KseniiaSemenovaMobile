@@ -1,29 +1,47 @@
 package scenarios.hooks;
 
+import enums.PropertiesPath;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-import setup.Driver;
-
+import setup.TestProperties;
 import java.io.IOException;
 
+import static setup.Driver.getDriver;
+import static setup.Driver.prepareDriver;
+import static setup.Driver.setProperties;
+
+/**
+ * The class for tests precondition and postcondition
+ */
 @Test(groups = {"native","web"})
-public class Hooks extends Driver{
-    protected Hooks() throws IOException {
-        super();
+public class Hooks {
+
+    private PropertiesPath path;
+
+    protected Hooks(PropertiesPath path) throws IOException {
+        this.path = path;
     }
 
-    @BeforeSuite(description = "Prepare driver to run test(s)")
+    /**
+     * Loads properties and prepares driver
+     * @throws Exception
+     */
+    @BeforeSuite(description = "Prepare driver to run tests")
     public void setUp() throws Exception {
+        TestProperties properties = new TestProperties(path);
+        setProperties(properties);
         prepareDriver();
-        System.out.println("Driver prepared");
 
     }
 
+    /**
+     * Closes driver
+     * @throws Exception
+     */
     @AfterSuite(description = "Close driver on all tests completion")
     public void tearDown() throws Exception {
-        driver.quit();
-        System.out.println("Driver closed");
+        getDriver().quit();
     }
 
 }

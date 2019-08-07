@@ -1,24 +1,32 @@
 package scenarios.webTests;
 
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import enums.PropertiesPath;
 import org.testng.annotations.Test;
+import pages.webSitePages.ianaOrgPages.MainPage;
 import scenarios.hooks.Hooks;
-import setup.Driver;
-
 import java.io.IOException;
 
+import static setup.Driver.*;
+
+/**
+ * Tests for web apps
+ */
 @Test(groups = "web")
 public class SimpleWebTests extends Hooks {
+
     protected SimpleWebTests() throws IOException {
-        super();
+        super(PropertiesPath.WEB_TEST_DATA);
     }
 
-    @Test(description = "Open website")
-    public void webTest() throws InterruptedException {
-        driver.get(SUT);
-    // this always ends OK; it's a drawback.
-        wait.until(ExpectedConditions.urlToBe(SUT+"/"));
-        System.out.println("Site opening done");
+    /**
+     * Opens website home page and checks result
+     * @throws Exception
+     */
+   @Test(description = "Opens home page and checks title and status")
+   public void siteIanaOrgTest() throws Exception {
+       MainPage mainPage = new MainPage(getDriver());
+       mainPage.openPage(SUT);
+       mainPage.checkPageIsOpened(BROWSER_TITLE);
+       mainPage.checkPageStatusCode(SUT);
     }
-
 }

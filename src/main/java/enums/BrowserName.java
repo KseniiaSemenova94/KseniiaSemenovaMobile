@@ -1,5 +1,8 @@
 package enums;
 
+/**
+ * The enum for possible browser names
+ */
 public enum BrowserName {
 
     CHROME("Chrome"),

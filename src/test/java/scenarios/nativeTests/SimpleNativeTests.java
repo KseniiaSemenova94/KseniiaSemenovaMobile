@@ -1,25 +1,36 @@
 package scenarios.nativeTests;
 
-import org.openqa.selenium.By;
+import enums.PropertiesPath;
 import org.testng.annotations.Test;
+import pages.nativeAppPages.contactManagerPages.AddContactPage;
+import pages.nativeAppPages.contactManagerPages.MainPage;
 import scenarios.hooks.Hooks;
-import setup.Driver;
-
 import java.io.IOException;
 
+import static setup.Driver.getDriver;
+
+/**
+ * Tests for native application
+ */
 @Test(groups = "native")
-public class SimpleNativeTests extends Hooks{
+public class SimpleNativeTests extends Hooks {
+
     protected SimpleNativeTests() throws IOException {
-        super();
+        super(PropertiesPath.NATIVE_TEST_DATA);
     }
 
-    @Test(description = "Just click on button 'Add contact'")
-    public void simplestTest(){
-        String app_package_name = "com.example.android.contactmanager:id/";
-        By add_btn = By.id(app_package_name + "addContactButton");
-        driver.findElement(add_btn).click();
-// The result of clicking doesn't checked.
-        System.out.println("Simplest Appium test done");
+    /**
+     * Opens "Add Contact" page and checks its elements
+     * @throws Exception
+     */
+    @Test(description = "Clicks on button 'Add contact' and checks result")
+    public void appContactManagerTest() throws Exception {
+        new MainPage(getDriver()).clickAddButton();
+        AddContactPage addContactPage = new AddContactPage(getDriver());
+        addContactPage.checkTargetAccountFieldIsDisplayed();
+        addContactPage.checkContactNameFieldIsDisplayed();
+        addContactPage.checkContactPhoneFieldIsDisplayed();
+        addContactPage.checkContactEmailFieldIsDisplayed();
+        addContactPage.checkKeyboardIsVisible();
     }
-
 }

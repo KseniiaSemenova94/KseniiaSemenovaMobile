@@ -3,3 +3,4 @@ Capabilities “platformName” should be changed to name of real device (in my 
 
 6.	Connect a real device to Appium (describe required actions) and run tests.
 Are there any difference with run on emulator?
+Tests run without any difference.
