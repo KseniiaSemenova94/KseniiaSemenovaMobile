@@ -41,7 +41,7 @@ public class MainPage {
      * @param browserTitle
      */
     public void checkPageIsOpened(String browserTitle) {
-        assertNotEquals(driver.getTitle(), browserTitle, "Checks that browser title is not correct");
+        assertEquals(driver.getTitle(), browserTitle, "Browser title is not correct");
     }
 
     /**

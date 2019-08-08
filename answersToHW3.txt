@@ -1,0 +1,13 @@
+1. Change settings to run web test on a certain iOS device in mobile cloud. Run test with your changes. Did test pass?
+I used UDID instead of deviceName, changed platform to iOS, and test passed without any problem.
+
+3. Run test with your changes. Did test pass?
+Yes, if the application was previously installed on the device.
+
+4. Try to use autoLaunch capability with app as before instead of appPackage and appActivity. Does this approach work?
+No, in this case I have the error: {"status":13,"value":{"message":"An unknown server-side error occurred while processing the command. Original error: The desired capabilities must include either an app, appPackage or browserName"},"sessionId":null}
+
+8.	What’s wrong with our code? How to fix/improve it? Implement your suggestions.
+a) I hid non-encrypted access token using Base64, it's not the best solution, but I tried.
+b) My code is not cross-platform, I need to add locators for the ios version of the application under test.
+

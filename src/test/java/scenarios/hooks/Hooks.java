@@ -41,7 +41,12 @@ public class Hooks {
      */
     @AfterSuite(description = "Close driver on all tests completion")
     public void tearDown() throws Exception {
-        getDriver().quit();
+        try {
+            getDriver().close();
+        }
+        catch (Exception e) {
+            getDriver().closeApp();
+        }
     }
 
 }

@@ -9,7 +9,9 @@ public enum  PropertiesKey {
     BROWSER_TITLE_KEY("browserTitle"),
     DRIVER_KEY("driver"),
     PLATFORM_KEY("platform"),
-    UDID_KEY("udid");
+    UDID_KEY("udid"),
+    APP_ACTIVITY_KEY("appActivity"),
+    APP_PACKAGE_KEY("appPackage");
 
     final String name;
 
