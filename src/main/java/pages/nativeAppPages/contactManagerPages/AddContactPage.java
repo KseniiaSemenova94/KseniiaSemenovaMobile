@@ -6,7 +6,6 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.PageFactory;
 
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -62,9 +61,9 @@ public class AddContactPage {
     }
 
     /**
-     * Asserts that keyboard is displayed
+     * Asserts that keyboard is displayed, if it's not method throws Exception
      */
     public void checkKeyboardIsVisible() throws Exception {
-        assertNotNull(driver.getKeyboard());
+        driver.hideKeyboard();
     }
 }

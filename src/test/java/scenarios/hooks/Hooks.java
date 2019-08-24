@@ -1,37 +1,39 @@
 package scenarios.hooks;
 
 import enums.PropertiesPath;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+import setup.Driver;
 import setup.TestProperties;
-import java.io.IOException;
 
-import static setup.Driver.getDriver;
-import static setup.Driver.prepareDriver;
-import static setup.Driver.setProperties;
 
 /**
  * The class for tests precondition and postcondition
  */
-@Test(groups = {"native","web"})
 public class Hooks {
 
-    private PropertiesPath path;
+    protected Driver driver = new Driver();
 
-    protected Hooks(PropertiesPath path) throws IOException {
-        this.path = path;
+    /**
+     * Loads properties and prepares driver for native test(s)
+     * @throws Exception
+     */
+    @BeforeGroups(groups = {"native"}, description = "Prepare driver to run tests")
+    public void setUpNative() throws Exception {
+        TestProperties properties = new TestProperties(PropertiesPath.NATIVE_TEST_DATA);
+        driver.setProperties(properties);
+        driver.prepareDriver();
+
     }
 
     /**
-     * Loads properties and prepares driver
+     * Loads properties and prepares driver for web test(s)
      * @throws Exception
      */
-    @BeforeSuite(description = "Prepare driver to run tests")
-    public void setUp() throws Exception {
-        TestProperties properties = new TestProperties(path);
-        setProperties(properties);
-        prepareDriver();
+    @BeforeGroups(groups = {"web"}, description = "Prepare driver to run tests")
+    public void setUpWeb() throws Exception {
+        TestProperties properties = new TestProperties(PropertiesPath.WEB_TEST_DATA);
+        driver.setProperties(properties);
+        driver.prepareDriver();
 
     }
 
@@ -39,9 +41,10 @@ public class Hooks {
      * Closes driver
      * @throws Exception
      */
-    @AfterSuite(description = "Close driver on all tests completion")
+    @AfterGroups(groups = {"web", "native"}, description = "Close driver on all tests completion")
     public void tearDown() throws Exception {
-        getDriver().quit();
+        driver.getDriver().quit();
+        driver.refreshDriver();
     }
 
 }

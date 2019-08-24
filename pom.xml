@@ -8,6 +8,27 @@
     <artifactId>kseniia-semenova-homework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <profiles>
+        <profile>
+            <id>nativeTests</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.xml>src/test/resources/nativeTests.xml</suite.xml>
+            </properties>
+        </profile>
+        <profile>
+            <id>webTests</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <suite.xml>src/test/resources/webTests.xml</suite.xml>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>io.appium</groupId>

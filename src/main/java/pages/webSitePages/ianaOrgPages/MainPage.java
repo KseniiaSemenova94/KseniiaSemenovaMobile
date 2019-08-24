@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.testng.Assert.assertEquals;
 import static setup.Driver.driverWait;
 
+
 /**
  * The class represents home page of website https://www.iana.org
  */
